@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h4 class="card-title text-center mb-4">Create Account</h4>
+
+        <form method="POST">
+
+          <div class="mb-3">
+            <label class="form-label">Username *</label>
+            <input
+              type="text"
+              name="username"
+              class="form-control"
+              required
+            >
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Email *</label>
+            <input
+              type="email"
+              name="email"
+              class="form-control"
+              required
+            >
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Dog name (optional)</label>
+            <input
+              type="text"
+              name="dog_name"
+              class="form-control"
+            >
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Password *</label>
+            <input
+              type="password"
+              name="password"
+              class="form-control"
+              required
+            >
+            <div class="form-text">
+              Min 8 chars, uppercase, lowercase, number & symbol
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Confirm password *</label>
+            <input
+              type="password"
+              name="confirm_password"
+              class="form-control"
+              required
+            >
+          </div>
+
+          <!-- Error handling (matches your Flask code) -->
+          {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+          {% endif %}
+          {% if long_username_error %}
+            <div class="alert alert-danger">{{ long_username_error }}</div>
+          {% endif %}
+          {% if long_dog_name_error %}
+            <div class="alert alert-danger">{{ long_dog_name_error }}</div>
+          {% endif %}
+          {% if email_format_error %}
+            <div class="alert alert-danger">{{ email_format_error }}</div>
+          {% endif %}
+          {% if weak_password_error %}
+            <div class="alert alert-danger">{{ weak_password_error }}</div>
+          {% endif %}
+          {% if confirm_password_error %}
+            <div class="alert alert-danger">{{ confirm_password_error }}</div>
+          {% endif %}
+          {% if existing_user_error %}
+            <div class="alert alert-danger">{{ existing_user_error }}</div>
+          {% endif %}
+
+          <button type="submit" class="btn btn-success w-100">
+            Register
+          </button>
+
+        </form>
+
+        <div class="text-center mt-3">
+          <small>
+            Already have an account?
+            <a href="{{ url_for('login') }}">Login</a>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

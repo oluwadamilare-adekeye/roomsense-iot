@@ -1,4 +1,3 @@
-import os
 from pubnub.callbacks import SubscribeCallback
 from pubnub.models.consumer.pubsub import PNMessageResult
 
@@ -8,19 +7,20 @@ from models import SensorReading
 
 class RoomEventsListener(SubscribeCallback):
     def message(self, pubnub, message: PNMessageResult):
-        data = message.message  # PubNub payload (dict)
-
-        # Expected payload example:
-        # {
-        #   "device_id": "pi400-01",
-        #   "motion": true,
-        #   "temperature": 22.5,
-        #   "humidity": 40.0
-        # }
+        data = message.message or {}  # PubNub payload (dict)
 
         motion = bool(data.get("motion", False))
-        temperature = data.get("temperature", None)
-        humidity = data.get("humidity", None)
+
+        # cast safely
+        try:
+            temperature = float(data.get("temperature")) if data.get("temperature") is not None else None
+        except (TypeError, ValueError):
+            temperature = None
+
+        try:
+            humidity = float(data.get("humidity")) if data.get("humidity") is not None else None
+        except (TypeError, ValueError):
+            humidity = None
 
         session = SessionLocal()
         try:

@@ -3,34 +3,34 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">Welcome, {{ dog_name }}</h2>
+<h2 class="mb-4">Welcome, {{ username }}</h2>
 
 <div class="row">
-  <div class="col-md-4">
-    <div class="card text-center">
-      <div class="card-body">
-        <h5>Temperature</h5>
-        <p class="fs-3">23.1°C</p>
-      </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5>Temperature</h5>
+                <p class="fs-3">23.1°C</p>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div class="col-md-4">
-    <div class="card text-center">
-      <div class="card-body">
-        <h5>Humidity</h5>
-        <p class="fs-3">42%</p>
-      </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5>Humidity</h5>
+                <p class="fs-3">42%</p>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div class="col-md-4">
-    <div class="card text-center">
-      <div class="card-body">
-        <h5>Motion</h5>
-        <span class="badge bg-success">Detected</span>
-      </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5>Motion</h5>
+                <span class="badge bg-success">Detected</span>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 {% endblock %}

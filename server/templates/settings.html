@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<div class="has-bottom-nav">
+  <h4 class="mb-4">Account Settings</h4>
+
+  <div class="card app-card mb-3">
+    <div class="card-body p-4">
+      <h6 class="mb-3">Profile Information</h6>
+
+      {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+      {% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
+
+      <form method="POST">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input
+            name="username"
+            class="form-control form-control-lg"
+            value="{{ username or '' }}"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email Address</label>
+          <input
+            name="email"
+            type="email"
+            class="form-control form-control-lg"
+            value="{{ email or '' }}"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn btn-dark w-100 btn-dark-rounded">
+          Save Changes
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card app-card">
+    <div class="card-body p-4">
+      <h6 class="mb-3">Account Actions</h6>
+      <a class="btn btn-danger w-100 btn-dark-rounded" href="{{ url_for('logout_page') }}">
+        Logout
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <div class="nav-inner">
+    <a href="{{ url_for('dashboard_page') }}">
+      <span style="font-size:18px;">⌗</span>
+      Dashboard
+    </a>
+    <a href="{{ url_for('settings_page') }}" class="active">
+      <span style="font-size:18px;">⚙</span>
+      Settings
+    </a>
+  </div>
+</div>
+{% endblock %}

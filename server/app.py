@@ -37,7 +37,9 @@ Base.metadata.create_all(bind=engine)
 
 @app.get("/")
 def home_page():
-    return render_template("index.html")
+    if "user_id" in session:
+        return redirect(url_for("dashboard_page"))
+    return render_template("landing.html")
 
 
 @app.get("/dashboard")
@@ -140,6 +142,23 @@ def logout_page():
     session.clear()
     return redirect(url_for("login_page"))
 
+@app.route("/settings", methods=["GET", "POST"])
+def settings_page():
+    if "user_id" not in session:
+        return redirect(url_for("login_page"))
+
+    db = SessionLocal()
+    try:
+        user = db.query(User).get(session["user_id"])
+        if request.method == "POST":
+            user.username = (request.form.get("username") or "").strip()
+            user.email = (request.form.get("email") or "").strip().lower()
+            db.commit()
+            session["username"] = user.username
+            return render_template("settings.html", username=user.username, email=user.email, success="Saved!")
+        return render_template("settings.html", username=user.username, email=user.email)
+    finally:
+        db.close()
 
 # -------------------------
 # API

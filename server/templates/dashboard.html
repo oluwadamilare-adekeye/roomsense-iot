@@ -1,36 +1,62 @@
 {% extends "layout.html" %}
-
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">Welcome, {{ username }}</h2>
+<div class="has-bottom-nav">
+  <h4 class="mb-4">RoomSense Dashboard</h4>
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5>Temperature</h5>
-                <p class="fs-3">23.1°C</p>
-            </div>
+  <div class="row g-3">
+    <div class="col-12">
+      <div class="card sensor-card text-center">
+        <div class="card-body py-4">
+          <div class="sensor-icon">🌡️</div>
+          <div class="text-muted mt-2">Temperature</div>
+          <div class="display-6 fw-semibold">
+            {{ temperature if temperature is not none else 22.5 }}
+            <span class="fs-4 text-muted">°C</span>
+          </div>
         </div>
+      </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5>Humidity</h5>
-                <p class="fs-3">42%</p>
-            </div>
+    <div class="col-12">
+      <div class="card sensor-card text-center">
+        <div class="card-body py-4">
+          <div class="sensor-icon">💧</div>
+          <div class="text-muted mt-2">Humidity</div>
+          <div class="display-6 fw-semibold">
+            {{ humidity if humidity is not none else 65 }}
+            <span class="fs-4 text-muted">%</span>
+          </div>
         </div>
+      </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5>Motion</h5>
-                <span class="badge bg-success">Detected</span>
-            </div>
+    <div class="col-12">
+      <div class="card sensor-card text-center">
+        <div class="card-body py-4">
+          <div class="sensor-icon">📈</div>
+          <div class="text-muted mt-2">Motion Detection</div>
+          {% set motion_val = motion if motion is not none else True %}
+          <div class="display-6 fw-semibold">
+            {{ "Detected" if motion_val else "No Motion" }}
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <div class="nav-inner">
+    <a href="{{ url_for('dashboard_page') }}" class="active">
+      <span style="font-size:18px;">⌗</span>
+      Dashboard
+    </a>
+    <a href="{{ url_for('settings_page') }}">
+      <span style="font-size:18px;">⚙</span>
+      Settings
+    </a>
+  </div>
 </div>
 {% endblock %}

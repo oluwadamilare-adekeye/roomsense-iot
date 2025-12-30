@@ -1,74 +1,76 @@
 {% extends "layout.html" %}
-
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h4 class="card-title text-center mb-4">Create Account</h4>
+<div class="card app-card">
+  <div class="card-body p-4 p-md-5">
+    <h5 class="text-center mb-4">Register for RoomSense</h5>
 
-                <form method="POST">
+    <form method="POST">
+      <div class="mb-3">
+        <label class="form-label">Username *</label>
+        <input
+          type="text"
+          name="username"
+          class="form-control form-control-lg"
+          placeholder="Enter your username"
+          required
+        />
+      </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Username *</label>
-                        <input type="text" name="username" class="form-control" required>
-                    </div>
+      <div class="mb-3">
+        <label class="form-label">Email *</label>
+        <input
+          type="email"
+          name="email"
+          class="form-control form-control-lg"
+          placeholder="Enter your email"
+          required
+        />
+      </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Email *</label>
-                        <input type="email" name="email" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Password *</label>
-                        <input type="password" name="password" class="form-control" required>
-                        <div class="form-text">
-                            Min 8 chars, uppercase, lowercase, number & symbol
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Confirm password *</label>
-                        <input type="password" name="confirm_password" class="form-control" required>
-                    </div>
-
-                    <!-- Error handling (matches your Flask code) -->
-                    {% if error %}
-                    <div class="alert alert-danger">{{ error }}</div>
-                    {% endif %}
-                    {% if long_username_error %}
-                    <div class="alert alert-danger">{{ long_username_error }}</div>
-                    {% endif %}
-                    {% if email_format_error %}
-                    <div class="alert alert-danger">{{ email_format_error }}</div>
-                    {% endif %}
-                    {% if weak_password_error %}
-                    <div class="alert alert-danger">{{ weak_password_error }}</div>
-                    {% endif %}
-                    {% if confirm_password_error %}
-                    <div class="alert alert-danger">{{ confirm_password_error }}</div>
-                    {% endif %}
-                    {% if existing_user_error %}
-                    <div class="alert alert-danger">{{ existing_user_error }}</div>
-                    {% endif %}
-
-                    <button type="submit" class="btn btn-success w-100">
-                        Register
-                    </button>
-
-                </form>
-
-                <div class="text-center mt-3">
-                    <small>
-                        Already have an account?
-                        <a href="{{ url_for('login_page') }}">Login</a>
-                    </small>
-                </div>
-
-            </div>
+      <div class="mb-3">
+        <label class="form-label">Password *</label>
+        <input
+          type="password"
+          name="password"
+          class="form-control form-control-lg"
+          placeholder="Enter your password"
+          required
+        />
+        <div class="form-text">
+          Min 8 chars, uppercase, lowercase, number & symbol
         </div>
-    </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Confirm password *</label>
+        <input
+          type="password"
+          name="confirm_password"
+          class="form-control form-control-lg"
+          placeholder="Confirm your password"
+          required
+        />
+      </div>
+
+      {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+      {% if long_username_error %}<div class="alert alert-danger">{{ long_username_error }}</div>{% endif %}
+      {% if email_format_error %}<div class="alert alert-danger">{{ email_format_error }}</div>{% endif %}
+      {% if weak_password_error %}<div class="alert alert-danger">{{ weak_password_error }}</div>{% endif %}
+      {% if confirm_password_error %}<div class="alert alert-danger">{{ confirm_password_error }}</div>{% endif %}
+      {% if existing_user_error %}<div class="alert alert-danger">{{ existing_user_error }}</div>{% endif %}
+
+      <button type="submit" class="btn btn-dark w-100 btn-dark-rounded">
+        Register
+      </button>
+
+      <div class="text-center mt-3">
+        <a href="{{ url_for('login_page') }}" class="text-primary text-decoration-none">
+          Already have an account? Login
+        </a>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}

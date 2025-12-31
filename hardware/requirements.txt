@@ -1,4 +1,0 @@
-python-dotenv
-pubnub
-RPi.GPIO
-adafruit-circuitpython-dht

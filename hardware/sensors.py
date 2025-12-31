@@ -1,21 +1,21 @@
-from gpiozero import MotionSensor, LED
+import RPi.GPIO as GPIO
 
-# BCM pin numbers
 PIR_PIN = 17
 LED_PIN = 27
 
-pir = MotionSensor(PIR_PIN)
-led = LED(LED_PIN)
+def setup():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+
+    GPIO.setup(PIR_PIN, GPIO.IN)          # PIR input
+    GPIO.setup(LED_PIN, GPIO.OUT)         # LED output
+    GPIO.output(LED_PIN, GPIO.LOW)
 
 def read_motion() -> bool:
-    return pir.motion_detected
+    return GPIO.input(PIR_PIN) == GPIO.HIGH
 
 def set_led(motion: bool):
-    if motion:
-        led.on()
-    else:
-        led.off()
+    GPIO.output(LED_PIN, GPIO.HIGH if motion else GPIO.LOW)
 
 def cleanup():
-    # gpiozero handles cleanup, but we can turn things off safely
-    led.off()
+    GPIO.output(LED_PIN, GPIO.LOW)

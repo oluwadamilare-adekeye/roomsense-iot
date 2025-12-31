@@ -1,16 +1,25 @@
-from gpiozero import Buzzer
+import time
+import RPi.GPIO as GPIO
 
 BUZZER_PIN = 22
-buzzer = Buzzer(BUZZER_PIN)
+
+def setup():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+
+    GPIO.setup(BUZZER_PIN, GPIO.OUT)
+    GPIO.output(BUZZER_PIN, GPIO.LOW)
 
 def buzz_on():
-    buzzer.on()
+    GPIO.output(BUZZER_PIN, GPIO.HIGH)
 
 def buzz_off():
-    buzzer.off()
+    GPIO.output(BUZZER_PIN, GPIO.LOW)
 
 def buzz_beep(duration: float = 0.2):
-    buzzer.beep(on_time=duration, off_time=duration, n=1, background=False)
+    buzz_on()
+    time.sleep(duration)
+    buzz_off()
 
 def cleanup():
-    buzzer.off()
+    GPIO.output(BUZZER_PIN, GPIO.LOW)

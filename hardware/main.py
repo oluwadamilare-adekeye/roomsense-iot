@@ -1,14 +1,21 @@
 import time
-from sensors import read_motion, set_led, cleanup as sensors_cleanup
-from buzzer import buzz_beep, buzz_off, cleanup as buzzer_cleanup
-from publisher import publish_event
+import RPi.GPIO as GPIO
 
-COOLDOWN_SECONDS = 5
+from sensors import setup as sensors_setup, read_motion, set_led, cleanup as sensors_cleanup
+from buzzer import setup as buzzer_setup, buzz_beep, cleanup as buzzer_cleanup
+
+# If you want PubNub publishing when motion happens:
+# from publisher import publish_event
+
+COOLDOWN_SECONDS = 2.0
 
 def main():
     print("[HW] RoomSense hardware starting...")
 
-    last_sent = 0
+    sensors_setup()
+    buzzer_setup()
+
+    last_trigger_time = 0.0
 
     try:
         while True:
@@ -16,23 +23,15 @@ def main():
             set_led(motion)
 
             now = time.time()
-
-            if motion and (now - last_sent) >= COOLDOWN_SECONDS:
-                print("[HW] Motion detected -> beep + publish")
+            if motion and (now - last_trigger_time) > COOLDOWN_SECONDS:
+                print("[HW] Motion detected")
                 buzz_beep(0.2)
 
-                publish_event({
-                    "device_id": "pi-400",
-                    "motion": True,
-                    "ts": int(now)
-                })
+                # publish_event({"device_id": "roomsense-pi", "motion": True})
 
-                last_sent = now
+                last_trigger_time = now
 
-            if not motion:
-                buzz_off()
-
-            time.sleep(0.2)
+            time.sleep(0.1)
 
     except KeyboardInterrupt:
         print("\n[HW] Stopping...")
@@ -40,6 +39,7 @@ def main():
     finally:
         sensors_cleanup()
         buzzer_cleanup()
+        GPIO.cleanup()
 
 if __name__ == "__main__":
     main()

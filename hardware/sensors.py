@@ -2,23 +2,20 @@ import RPi.GPIO as GPIO
 
 PIR_PIN = 17
 LED_PIN = 27
-BUZZER_PIN = 22
 
-def setup_gpio():
+def setup():
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(PIR_PIN, GPIO.IN)
-    GPIO.setup(LED_PIN, GPIO.OUT)
-    GPIO.setup(BUZZER_PIN, GPIO.OUT)
+    GPIO.setwarnings(False)
 
+    GPIO.setup(PIR_PIN, GPIO.IN)          # PIR input
+    GPIO.setup(LED_PIN, GPIO.OUT)         # LED output
     GPIO.output(LED_PIN, GPIO.LOW)
-    GPIO.output(BUZZER_PIN, GPIO.LOW)
 
-def read_motion():
+def read_motion() -> bool:
     return GPIO.input(PIR_PIN) == GPIO.HIGH
 
-def set_outputs(motion: bool):
+def set_led(motion: bool):
     GPIO.output(LED_PIN, GPIO.HIGH if motion else GPIO.LOW)
-    GPIO.output(BUZZER_PIN, GPIO.HIGH if motion else GPIO.LOW)
 
 def cleanup():
-    GPIO.cleanup()
+    GPIO.output(LED_PIN, GPIO.LOW)

@@ -23,7 +23,7 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev")
 IS_PROD = os.getenv("FLASK_ENV") == "production"
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SECURE=IS_PROD,  # True on AWS/HTTPS
+    SESSION_COOKIE_SECURE=IS_PROD,  # True on HTTPS
     SESSION_COOKIE_SAMESITE="Lax",
     PERMANENT_SESSION_LIFETIME=timedelta(days=3),
 )
@@ -36,6 +36,11 @@ Base.metadata.create_all(bind=engine)
 # -------------------------
 
 @app.get("/")
+def root():
+    return redirect(url_for("home_page"))
+
+
+@app.get("/landing")
 def home_page():
     if "user_id" in session:
         return redirect(url_for("dashboard_page"))
@@ -142,6 +147,7 @@ def logout_page():
     session.clear()
     return redirect(url_for("login_page"))
 
+
 @app.route("/settings", methods=["GET", "POST"])
 def settings_page():
     if "user_id" not in session:
@@ -149,16 +155,22 @@ def settings_page():
 
     db = SessionLocal()
     try:
-        user = db.query(User).get(session["user_id"])
+        user = db.get(User, session["user_id"])
+        if not user:
+            session.clear()
+            return redirect(url_for("login_page"))
+
         if request.method == "POST":
             user.username = (request.form.get("username") or "").strip()
             user.email = (request.form.get("email") or "").strip().lower()
             db.commit()
             session["username"] = user.username
             return render_template("settings.html", username=user.username, email=user.email, success="Saved!")
+
         return render_template("settings.html", username=user.username, email=user.email)
     finally:
         db.close()
+
 
 # -------------------------
 # API
@@ -225,4 +237,4 @@ def publish_test_to_pubnub():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=os.getenv("FLASK_ENV") != "production")

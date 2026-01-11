@@ -21,3 +21,6 @@ node_modules/
 
 # SQLite
 *.db
+
+# Local-only IoT simulator
+hardware/simulate_device.py

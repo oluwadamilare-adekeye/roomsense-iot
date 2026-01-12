@@ -28,7 +28,7 @@ app.config.update(
     PERMANENT_SESSION_LIFETIME=timedelta(days=3),
 )
 
-# Create tables (SQLite locally, Postgres later via DATABASE_URL)
+# Create tables
 Base.metadata.create_all(bind=engine)
 
 # -------------------------
@@ -51,10 +51,28 @@ def home_page():
 def dashboard_page():
     if "user_id" not in session:
         return redirect(url_for("login_page"))
-    return render_template(
-        "dashboard.html",
-        username=session.get("username"),
-    )
+
+    db = SessionLocal()
+    try:
+        latest = (
+            db.query(SensorReading)
+            .order_by(SensorReading.created_at.desc())
+            .first()
+        )
+
+        temperature = latest.temperature if latest else None
+        humidity = latest.humidity if latest else None
+        motion = latest.motion if latest else None
+
+        return render_template(
+            "dashboard.html",
+            username=session.get("username"),
+            temperature=temperature,
+            humidity=humidity,
+            motion=motion
+        )
+    finally:
+        db.close()
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -94,19 +112,16 @@ def register_page():
         password = request.form.get("password") or ""
         confirm_password = request.form.get("confirm_password") or ""
 
-        # Required
         if not username or not email or not password:
             return render_template("register.html", error="Please fill in all required fields!"), 400
 
         if len(username) > 50:
             return render_template("register.html", long_username_error="Username must be 50 characters or fewer."), 400
 
-        # Email format
         email_regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
         if not re.match(email_regex, email):
             return render_template("register.html", email_format_error="Invalid email format."), 400
 
-        # Password strength: 8+, upper, lower, digit, special
         password_regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
         if not re.match(password_regex, password):
             return render_template(

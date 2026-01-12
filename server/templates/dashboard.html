@@ -6,45 +6,60 @@
   <h4 class="mb-4">RoomSense Dashboard</h4>
 
   <div class="row g-3">
+    <!-- Temperature -->
     <div class="col-12">
       <div class="card sensor-card text-center">
         <div class="card-body py-4">
           <div class="sensor-icon">🌡️</div>
           <div class="text-muted mt-2">Temperature</div>
           <div class="display-6 fw-semibold">
-            {{ temperature if temperature is not none else 22.5 }}
+            {{ "%.1f"|format(temperature) if temperature is not none else "--" }}
             <span class="fs-4 text-muted">°C</span>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Humidity -->
     <div class="col-12">
       <div class="card sensor-card text-center">
         <div class="card-body py-4">
           <div class="sensor-icon">💧</div>
           <div class="text-muted mt-2">Humidity</div>
           <div class="display-6 fw-semibold">
-            {{ humidity if humidity is not none else 65 }}
+            {{ "%.1f"|format(humidity) if humidity is not none else "--" }}
             <span class="fs-4 text-muted">%</span>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Motion -->
     <div class="col-12">
       <div class="card sensor-card text-center">
         <div class="card-body py-4">
           <div class="sensor-icon">📈</div>
           <div class="text-muted mt-2">Motion Detection</div>
-          {% set motion_val = motion if motion is not none else True %}
           <div class="display-6 fw-semibold">
-            {{ "Detected" if motion_val else "No Motion" }}
+            {% if motion is none %}
+              --
+            {% elif motion %}
+              Detected
+            {% else %}
+              No Motion
+            {% endif %}
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Optional: show last updated time if you want -->
+  {% if created_at %}
+    <div class="text-center text-muted small mt-3">
+      Last updated: {{ created_at }}
+    </div>
+  {% endif %}
 </div>
 
 <div class="bottom-nav">

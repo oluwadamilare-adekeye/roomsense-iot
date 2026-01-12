@@ -23,12 +23,12 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev")
 IS_PROD = os.getenv("FLASK_ENV") == "production"
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SECURE=IS_PROD,  # True on AWS/HTTPS
+    SESSION_COOKIE_SECURE=IS_PROD,  # True on HTTPS
     SESSION_COOKIE_SAMESITE="Lax",
     PERMANENT_SESSION_LIFETIME=timedelta(days=3),
 )
 
-# Create tables (SQLite locally, Postgres later via DATABASE_URL)
+# Create tables
 Base.metadata.create_all(bind=engine)
 
 # -------------------------
@@ -46,10 +46,28 @@ def home_page():
 def dashboard_page():
     if "user_id" not in session:
         return redirect(url_for("login_page"))
-    return render_template(
-        "dashboard.html",
-        username=session.get("username"),
-    )
+
+    db = SessionLocal()
+    try:
+        latest = (
+            db.query(SensorReading)
+            .order_by(SensorReading.created_at.desc())
+            .first()
+        )
+
+        temperature = latest.temperature if latest else None
+        humidity = latest.humidity if latest else None
+        motion = latest.motion if latest else None
+
+        return render_template(
+            "dashboard.html",
+            username=session.get("username"),
+            temperature=temperature,
+            humidity=humidity,
+            motion=motion
+        )
+    finally:
+        db.close()
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -89,19 +107,16 @@ def register_page():
         password = request.form.get("password") or ""
         confirm_password = request.form.get("confirm_password") or ""
 
-        # Required
         if not username or not email or not password:
             return render_template("register.html", error="Please fill in all required fields!"), 400
 
         if len(username) > 50:
             return render_template("register.html", long_username_error="Username must be 50 characters or fewer."), 400
 
-        # Email format
         email_regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
         if not re.match(email_regex, email):
             return render_template("register.html", email_format_error="Invalid email format."), 400
 
-        # Password strength: 8+, upper, lower, digit, special
         password_regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
         if not re.match(password_regex, password):
             return render_template(
@@ -142,6 +157,7 @@ def logout_page():
     session.clear()
     return redirect(url_for("login_page"))
 
+
 @app.route("/settings", methods=["GET", "POST"])
 def settings_page():
     if "user_id" not in session:
@@ -149,16 +165,22 @@ def settings_page():
 
     db = SessionLocal()
     try:
-        user = db.query(User).get(session["user_id"])
+        user = db.get(User, session["user_id"])
+        if not user:
+            session.clear()
+            return redirect(url_for("login_page"))
+
         if request.method == "POST":
             user.username = (request.form.get("username") or "").strip()
             user.email = (request.form.get("email") or "").strip().lower()
             db.commit()
             session["username"] = user.username
             return render_template("settings.html", username=user.username, email=user.email, success="Saved!")
+
         return render_template("settings.html", username=user.username, email=user.email)
     finally:
         db.close()
+
 
 # -------------------------
 # API
@@ -225,4 +247,4 @@ def publish_test_to_pubnub():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=os.getenv("FLASK_ENV") != "production")

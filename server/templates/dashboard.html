@@ -3,16 +3,16 @@
 
 {% block content %}
 <div class="has-bottom-nav">
-  <h4 class="mb-4">RoomSense Dashboard</h4>
+  <h4 class="mb-3">RoomSense Dashboard</h4>
 
   <div class="row g-3">
     <!-- Temperature -->
     <div class="col-12">
       <div class="card sensor-card text-center">
-        <div class="card-body py-4">
-          <div class="sensor-icon">🌡️</div>
-          <div class="text-muted mt-2">Temperature</div>
-          <div class="display-6 fw-semibold">
+        <div class="card-body py-3">
+          <div class="sensor-icon" style="font-size:34px;">🌡️</div>
+          <div class="text-muted mt-1">Temperature</div>
+          <div class="display-6 fw-semibold mt-1">
             {{ "%.1f"|format(temperature) if temperature is not none else "--" }}
             <span class="fs-4 text-muted">°C</span>
           </div>
@@ -23,10 +23,10 @@
     <!-- Humidity -->
     <div class="col-12">
       <div class="card sensor-card text-center">
-        <div class="card-body py-4">
-          <div class="sensor-icon">💧</div>
-          <div class="text-muted mt-2">Humidity</div>
-          <div class="display-6 fw-semibold">
+        <div class="card-body py-3">
+          <div class="sensor-icon" style="font-size:34px;">💧</div>
+          <div class="text-muted mt-1">Humidity</div>
+          <div class="display-6 fw-semibold mt-1">
             {{ "%.1f"|format(humidity) if humidity is not none else "--" }}
             <span class="fs-4 text-muted">%</span>
           </div>
@@ -35,12 +35,12 @@
     </div>
 
     <!-- Motion -->
-    <div class="col-12">
+    <div class="col-12 mb-2">
       <div class="card sensor-card text-center">
-        <div class="card-body py-4">
-          <div class="sensor-icon">📈</div>
-          <div class="text-muted mt-2">Motion Detection</div>
-          <div class="display-6 fw-semibold">
+        <div class="card-body py-3">
+          <div class="sensor-icon" style="font-size:34px;">📈</div>
+          <div class="text-muted mt-1">Motion Detection</div>
+          <div class="display-6 fw-semibold mt-1">
             {% if motion is none %}
               --
             {% elif motion %}
@@ -54,9 +54,8 @@
     </div>
   </div>
 
-  <!-- Optional: show last updated time if you want -->
   {% if created_at %}
-    <div class="text-center text-muted small mt-3">
+    <div class="text-center text-muted small mt-2">
       Last updated: {{ created_at }}
     </div>
   {% endif %}

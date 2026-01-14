@@ -66,7 +66,7 @@ You can access the deployed dashboard here:
 - Motion events can trigger an actuator (buzzer).
 - Readings are forwarded to the backend for storage and visualisation.
 
-<img src="server/static/images/fritz.png" width="150" alt="Fritzing Diagram">
+<img src="server/static/images/fritz-diagram.png" width="150" alt="Fritzing Diagram">
 
 ---
 

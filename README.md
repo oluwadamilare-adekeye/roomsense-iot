@@ -49,13 +49,13 @@ You can access the deployed dashboard here:
 
 ### Hardware
 - **Raspberry Pi 400**  
-  <img src="server/static/images/raspberry-pi4.png" width="200">
+  <img src="server/static/images/raspberry-pi4.png" width="150">
 - **PIR Motion Sensor**  
-  <img src="server/static/images/pir-sensor.png" width="200">
+  <img src="server/static/images/pir-sensor.png" width="150">
 - **Environmental Sensor (Temperature & Humidity)**  
-  <img src="server/static/images/temperature.webp" width="200">
+  <img src="server/static/images/temperature.webp" width="150">
 - **Buzzer (Actuator / feedback)**  
-  <img src="server/static/images/piezo-buzzer.png" width="200">
+  <img src="server/static/images/piezo-buzzer.png" width="150">
 
 ---
 
@@ -66,13 +66,13 @@ You can access the deployed dashboard here:
 - Motion events can trigger an actuator (buzzer).
 - Readings are forwarded to the backend for storage and visualisation.
 
-> A Fritzing diagram is used to document physical wiring connections.
+<img src="server/static/images/fritz.png" width="150" alt="Fritzing Diagram">
 
 ---
 
 ## System Architecture 🌉
 
-![System Architecture](server/static/images/system-architecture.png)
+<img src="server/static/images/system-architecture.png" width="150" alt="System Architecture">
 
 ---
 

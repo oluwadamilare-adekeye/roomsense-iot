@@ -48,15 +48,14 @@ You can access the deployed dashboard here:
 - **HTTPS (TLS via Caddy)**
 
 ### Hardware
-- **Raspberry Pi 400**
-- **PIR Motion Sensor**
-- **Environmental Sensor (Temperature & Humidity)**
-- **Buzzer (Actuator / feedback)**
-
-#### Hardware Images
-![Raspberry Pi 4](server/static/images/raspberry-pi4.png)
-![PIR Sensor](server/static/images/pir-sensor.png)
-![Piezo Buzzer](server/static/images/piezo-buzzer.png)
+- **Raspberry Pi 400**  
+  <img src="server/static/images/raspberry-pi4.png" width="200">
+- **PIR Motion Sensor**  
+  <img src="server/static/images/pir-sensor.png" width="200">
+- **Environmental Sensor (Temperature & Humidity)**  
+  <img src="server/static/images/temperature.webp" width="200">
+- **Buzzer (Actuator / feedback)**  
+  <img src="server/static/images/piezo-buzzer.png" width="200">
 
 ---
 
